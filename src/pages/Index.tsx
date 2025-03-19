@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import ScoreBoard from '@/components/ScoreBoard';
 import CandyBoard from '@/components/CandyBoard';
@@ -8,7 +8,6 @@ import { RefreshCw } from 'lucide-react';
 
 const Index = () => {
   const { highScore } = useGameState();
-
   const [currentScore, setCurrentScore] = useState(0);
   const [moves, setMoves] = useState(20);
   const targetScore = 1000;
@@ -16,6 +15,14 @@ const Index = () => {
   const handleRestart = () => {
     window.location.reload();
   };
+
+  // Check for game over
+  useEffect(() => {
+    if (moves <= 0) {
+      // Game over logic can be added here
+      console.log("Game Over!");
+    }
+  }, [moves]);
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-purple-50 to-pink-50 p-4">
