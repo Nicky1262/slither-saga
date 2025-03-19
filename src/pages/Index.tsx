@@ -5,24 +5,43 @@ import ScoreBoard from '@/components/ScoreBoard';
 import CandyBoard from '@/components/CandyBoard';
 import { useGameState } from '@/hooks/useGameState';
 import { RefreshCw } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const { highScore } = useGameState();
   const [currentScore, setCurrentScore] = useState(0);
   const [moves, setMoves] = useState(20);
   const targetScore = 1000;
+  const { toast } = useToast();
 
   const handleRestart = () => {
+    setCurrentScore(0);
+    setMoves(20);
+    // Force a reload to reset the board
     window.location.reload();
   };
 
   // Check for game over
   useEffect(() => {
     if (moves <= 0) {
-      // Game over logic can be added here
-      console.log("Game Over!");
+      toast({
+        title: "Game Over!",
+        description: `Your final score: ${currentScore}`,
+        variant: "destructive",
+      });
     }
-  }, [moves]);
+  }, [moves, currentScore, toast]);
+
+  // Check for win condition
+  useEffect(() => {
+    if (currentScore >= targetScore) {
+      toast({
+        title: "You Win!",
+        description: `You reached the target score of ${targetScore}!`,
+        variant: "default",
+      });
+    }
+  }, [currentScore, targetScore, toast]);
 
   return (
     <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-purple-50 to-pink-50 p-4">
