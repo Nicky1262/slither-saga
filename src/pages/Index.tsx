@@ -1,48 +1,56 @@
 
 import React, { useState } from 'react';
-import GameBoard from '@/components/GameBoard';
-import ControlPanel from '@/components/ControlPanel';
+import { Button } from '@/components/ui/button';
 import ScoreBoard from '@/components/ScoreBoard';
+import CandyBoard from '@/components/CandyBoard';
 import { useGameState } from '@/hooks/useGameState';
+import { RefreshCw } from 'lucide-react';
 
 const Index = () => {
-  const {
-    direction,
-    score,
-    highScore,
-    gameOver,
-    isPaused,
-    setDirection,
-    resetGame,
-    togglePause
-  } = useGameState();
+  const { highScore } = useGameState();
 
   const [currentScore, setCurrentScore] = useState(0);
+  const [moves, setMoves] = useState(20);
+  const targetScore = 1000;
+
+  const handleRestart = () => {
+    window.location.reload();
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-purple-50 to-white p-4">
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-purple-50 to-pink-50 p-4">
       <div className="w-full max-w-md">
         <header className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-purple-800 mb-1">Slither Saga</h1>
-          <p className="text-purple-600">Swipe or use controls to move the snake</p>
+          <h1 className="text-3xl font-bold text-purple-800 mb-1">Candy Crush Saga</h1>
+          <p className="text-purple-600">Match 3 or more candies in a row or column</p>
         </header>
 
-        <ScoreBoard score={currentScore} highScore={highScore} />
-        
-        <GameBoard onScoreChange={setCurrentScore} />
-        
-        <ControlPanel
-          direction={direction}
-          isPaused={isPaused}
-          isGameOver={gameOver}
-          onDirectionChange={setDirection}
-          onReset={resetGame}
-          onTogglePause={togglePause}
+        <ScoreBoard 
+          score={currentScore} 
+          highScore={highScore}
+          moves={moves}
+          targetScore={targetScore}
         />
         
-        <div className="mt-8 text-center text-sm text-purple-500">
-          <p>Swipe on the game board or use the directional buttons to control the snake.</p>
-          <p className="mt-1">Eat the purple dots to grow and increase your score!</p>
+        <CandyBoard 
+          onScoreChange={setCurrentScore}
+          onMovesChange={setMoves}
+        />
+        
+        <div className="mt-4 flex justify-center">
+          <Button 
+            onClick={handleRestart}
+            variant="outline"
+            className="flex items-center gap-2 bg-white border-purple-200 text-purple-700 hover:bg-purple-50"
+          >
+            <RefreshCw size={16} />
+            Restart Game
+          </Button>
+        </div>
+        
+        <div className="mt-6 text-center text-sm text-purple-500">
+          <p>Tap on a candy to select it, then tap an adjacent candy to swap.</p>
+          <p className="mt-1">Match 3 or more candies to score points!</p>
         </div>
       </div>
     </div>
